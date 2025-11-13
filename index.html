@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimaCar.pe - Venta y Compra de Autos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/assets/logo.jpg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; color: #333; }
+        
+        .top-bar { background: #333; color: white; padding: 0.6rem 5%; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; flex-wrap: wrap; }
+        .top-bar-left { display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; }
+        .top-bar__item { display: flex; align-items: center; gap: 0.6rem; }
+        .top-bar__item i { color: white; font-size: 0.9rem; }
+        .top-bar__link { color: white; text-decoration: none; font-size: 0.9rem; }
+        .social-icons { display: flex; gap: 0.6rem; }
+        .social-icons a { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: transform 0.2s; font-size: 1rem; background: #1877F2; }
+        .social-icons a:hover { transform: scale(1.05); }
+        
+        header { background: white; padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+        .logo img { height: 90px; width: auto; object-fit: contain; }
+        nav { display: flex; gap: 2.5rem; align-items: center; }
+        nav a { text-decoration: none; color: #333; font-weight: 600; font-size: 1.05rem; transition: color 0.3s; }
+        nav a:hover { color: #014bae; }
+        nav a.inicio-btn { background: #1a1a1a; color: white; padding: 0.7rem 2rem; border-radius: 30px; font-weight: 600; white-space: nowrap; }
+        nav a.inicio-btn:hover { background: #333; }
+        
+        .menu-toggle { display: none; width: 50px; height: 50px; border-radius: 50%; background: #014bae; color: white; border: none; cursor: pointer; font-size: 1.3rem; align-items: center; justify-content: center; }
+        .mobile-menu { display: none; position: fixed; top: 0; left: -100%; width: 85%; max-width: 400px; height: 100vh; background: linear-gradient(135deg, #014bae 0%, #012a6b 100%); z-index: 9999; transition: left 0.3s; padding: 2rem 1.5rem; overflow-y: auto; }
+        .mobile-menu.active { left: 0; display: block; }
+        .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
+        .mobile-menu-logo { color: white; font-size: 2rem; font-weight: bold; }
+        .mobile-menu-logo span { color: #1a1a1a; }
+        .mobile-menu-close { background: white; color: #014bae; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; }
+        .mobile-menu-button { background: rgba(255, 255, 255, 0.15); border: none; padding: 1.2rem 1.5rem; border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s; text-decoration: none; color: white; }
+        .mobile-menu-button:hover { background: rgba(255, 255, 255, 0.25); transform: translateX(5px); }
+        .mobile-menu-button-content { display: flex; align-items: center; gap: 1rem; }
+        .mobile-menu-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+        .mobile-menu-icon.black { background: #1a1a1a; }
+        .mobile-menu-icon.blue { background: #003580; }
+        .mobile-menu-button span { font-size: 1.1rem; font-weight: 600; }
+        .mobile-menu-arrow { color: white; font-size: 1.2rem; opacity: 0.7; }
+        .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9998; }
+        .menu-overlay.active { display: block; }
+        
+        .hero { position: relative; height: 85vh; background: url('https://images.unsplash.com/photo-1542362567-b07e54358753?w=1920') center/cover; display: flex; justify-content: center; align-items: center; color: white; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.35); }
+        .hero-content { position: relative; z-index: 1; text-align: center; max-width: 90%; }
+        .hero h1 { font-size: 3.8rem; margin-bottom: 2.5rem; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero-buttons { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+        .hero-buttons button { padding: 1rem 2.5rem; font-size: 1.1rem; background: rgba(50, 50, 50, 0.8); color: white; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; white-space: nowrap; }
+        .hero-buttons button:hover { background: rgba(70, 70, 70, 0.9); border-color: rgba(255, 255, 255, 0.5); transform: translateY(-2px); }
+        
+        .inventory-header { background: #014bae; color: white; padding: 3rem 5%; text-align: center; }
+        .inventory-header h2 { font-size: 2.3rem; margin-bottom: 1rem; font-weight: 700; }
+        .inventory-header p { font-size: 1.1rem; opacity: 0.95; }
+        .loading { text-align: center; padding: 3rem; font-size: 1.2rem; color: #666; }
+        
+        .car-grid-wrapper { position: relative; padding: 3rem 0; max-width: 100%; overflow: hidden; background: #f8f8f8; }
+        .car-grid { display: flex; gap: 2rem; padding: 1rem 5%; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
+        .car-grid::-webkit-scrollbar { display: none; }
+        .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.3rem; z-index: 10; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
+        .carousel-arrow:hover { background: rgba(0, 0, 0, 0.8); transform: translateY(-50%) scale(1.1); }
+        .carousel-arrow.prev { left: 1%; }
+        .carousel-arrow.next { right: 1%; }
+        
+        .car-card { background: #f5f5f5; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; position: relative; min-width: 350px; max-width: 350px; flex-shrink: 0; cursor: pointer; }
+        .car-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .car-image-container { position: relative; width: 100%; height: 240px; overflow: hidden; }
+        .car-badge { position: absolute; top: 15px; right: 15px; background: #014bae; color: white; padding: 0.5rem 1rem; border-radius: 5px; font-size: 0.75rem; font-weight: bold; z-index: 1; text-transform: uppercase; }
+        .car-image { width: 100%; height: 100%; object-fit: cover; }
+        .car-info { padding: 1.5rem; background: white; }
+        .car-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; color: #333; text-align: center; }
+        .car-code { color: #999; font-size: 0.85rem; margin-bottom: 1.2rem; text-align: center; }
+        .car-specs { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        .car-specs span { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #333; font-weight: 600; }
+        .car-specs i { color: #014bae; font-size: 1.1rem; }
+        .car-price { font-size: 2rem; font-weight: 700; color: #014bae; margin-bottom: 1rem; text-align: center; }
+        .car-btn { width: 100%; padding: 0.9rem; background: #014bae; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .car-btn.black { background: #1a1a1a; color: white; }
+        .car-btn.black:hover { background: #333; }
+        .car-btn:hover { background: #003580; }
+        
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(1, 75, 174, 0.95); animation: fadeIn 0.3s; }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content { background: white; border-radius: 20px; max-width: 1200px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 2rem; background: #014bae; color: white; border-radius: 20px 20px 0 0; }
+        .modal-header h2 { font-size: 2rem; font-weight: 700; }
+        .modal-header .car-code-modal { font-size: 1rem; opacity: 0.9; }
+        .modal-close { background: white; color: #014bae; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .modal-close:hover { transform: rotate(90deg); background: #f0f0f0; }
+        .modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem; }
+        .modal-gallery { position: relative; display: flex; align-items: center; justify-content: center; }
+        .modal-main-image { width: 100%; height: 500px; object-fit: cover; border-radius: 15px; margin-bottom: 1rem; }
+        .gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.9); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .gallery-nav:hover { background: white; transform: translateY(-50%) scale(1.1); }
+        .gallery-nav.prev { left: 10px; }
+        .gallery-nav.next { right: 10px; }
+        .share-buttons { display: none; }
+        .modal-details { display: flex; flex-direction: column; gap: 1.5rem; }
+        .modal-price { font-size: 2.5rem; font-weight: 700; color: #014bae; }
+        .detail-table { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: #f8f8f8; padding: 1.5rem; border-radius: 10px; }
+        .detail-row { display: flex; flex-direction: column; gap: 0.3rem; }
+        .detail-label { font-size: 0.85rem; color: #666; font-weight: 600; text-transform: uppercase; }
+        .detail-value { font-size: 1rem; color: #333; font-weight: 600; }
+        .whatsapp-contact-btn { width: 100%; padding: 1.2rem; background: #25D366; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-top: 1rem; }
+        .whatsapp-contact-btn:hover { background: #20BA5A; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4); }
+        .whatsapp-contact-btn i { font-size: 1.5rem; }
+        
+        .brands-section { padding: 4rem 5%; background: #f8f8f8; }
+        .brands-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; font-weight: 700; }
+        .brands-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .brand-item { background: transparent; padding: 2rem 1rem; border-radius: 15px; text-align: center; transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .brand-item:hover { background: #f5f5f5; transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .brand-item .brand-logo-wrapper { width: 100px; height: 100px; background: transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+        .brand-item img { width: 70px; height: 70px; object-fit: contain; }
+        .brand-item .brand-emoji { font-size: 3rem; }
+        .brand-item p { font-weight: 600; color: #333; font-size: 1rem; }
+        .more-brands-btn { background: #014bae; color: white; padding: 1rem 2rem; border-radius: 30px; border: none; font-size: 1.05rem; font-weight: 600; cursor: pointer; margin: 2rem auto 0; display: block; transition: all 0.3s; }
+        .more-brands-btn:hover { background: #003580; transform: translateY(-2px); }
+        
+        .stats-section { background: #f0f5ff; padding: 4rem 5%; display: flex; justify-content: center; gap: 5rem; text-align: center; flex-wrap: wrap; }
+        .stat-item h3 { font-size: 4rem; color: #014bae; font-weight: 700; margin-bottom: 0.5rem; }
+        .stat-item p { font-size: 1.1rem; color: #333; font-weight: 600; }
+        
+        footer { background: #014bae; color: white; padding: 3rem 5% 1rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; max-width: 1400px; margin: 0 auto 2rem; }
+        .footer-section h3 { margin-bottom: 1.5rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .footer-section h3 i { font-size: 1.2rem; }
+        .footer-section p, .footer-section a { color: white; text-decoration: none; display: block; margin-bottom: 0.8rem; line-height: 1.6; }
+        .footer-section a { display: flex; align-items: center; gap: 0.5rem; }
+        .footer-section a i { font-size: 1rem; }
+        .footer-section a:hover { color: #1a1a1a; }
+        .footer-logo { font-size: 1.8rem; font-weight: bold; margin-bottom: 1rem; }
+        .footer-logo span { color: #1a1a1a; }
+        .footer-section .social-icons { margin-top: 1rem; display: flex; gap: 0.8rem; }
+        .schedule-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; }
+        .footer-links a:hover { color: #1a1a1a; }
+        
+        .contact-btn { background: #1a1a1a; color: white; padding: 1rem 2.2rem; border-radius: 30px; border: none; font-size: 1.05rem; font-weight: 600; cursor: pointer; position: fixed; bottom: 2.5rem; right: 2.5rem; z-index: 999; box-shadow: 0 4px 15px rgba(0,0,0,0.25); transition: all 0.3s; }
+        .contact-btn:hover { background: #333; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        
+        @media (max-width: 968px) {
+            .modal-body { grid-template-columns: 1fr; }
+            .detail-table { grid-template-columns: 1fr; }
+            nav { flex-wrap: wrap; gap: 1rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .stats-section { gap: 2rem; }
+        }
+        
+        @media (max-width: 768px) {
+            .top-bar { display: none; }
+            header { padding: 1rem 3%; }
+            .logo img { height: 60px; }
+            nav { display: none !important; }
+            .menu-toggle { display: flex; }
+            .hero { height: 60vh; }
+            .hero h1 { font-size: 1.8rem; margin-bottom: 1.5rem; }
+            .hero-buttons { flex-direction: column; gap: 0.8rem; align-items: center; }
+            .hero-buttons button { width: 100%; max-width: 280px; }
+            .inventory-header h2 { font-size: 1.8rem; }
+            .inventory-header p { font-size: 1rem; }
+            .carousel-arrow { width: 35px; height: 35px; font-size: 0.9rem; }
+            .car-card { min-width: 260px; max-width: 260px; }
+            .car-title { font-size: 1.2rem; }
+            .car-price { font-size: 1.6rem; }
+            .modal-content { width: 95%; }
+            .modal-header { padding: 1.5rem; }
+            .modal-header h2 { font-size: 1.5rem; }
+            .modal-body { padding: 1.5rem; }
+            .modal-main-image { height: 250px; }
+            .modal-price { font-size: 2rem; }
+            .brands-section h2 { font-size: 1.8rem; }
+            .stat-item h3 { font-size: 2.5rem; }
+            .stat-item p { font-size: 0.9rem; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+            .footer-section { display: flex; flex-direction: column; align-items: center; }
+            .footer-section h3 { justify-content: center; }
+            .footer-section a { justify-content: center; }
+            .footer-section .social-icons { justify-content: center; }
+            .schedule-row { max-width: 300px; }
+            .contact-btn { bottom: 1.5rem; right: 1.5rem; padding: 0.8rem 1.5rem; font-size: 0.95rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.5rem; }
+            .car-card { min-width: 240px; max-width: 240px; }
+            .modal-main-image { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="top-bar__item">
+                <i class="fas fa-phone"></i>
+                <a href="tel:964215296" class="top-bar__link">964 215 296</a>
+            </div>
+            <div class="top-bar__item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:limacar@gmail.com.pe" class="top-bar__link">limacar@gmail.com.pe</a>
+            </div>
+            <div class="top-bar__item">
+                <i class="fas fa-clock"></i>
+                <span class="top-bar__link">Lun - Vie: 9am a 6pm | Sab: 9am a 1pm</span>
+            </div>
+        </div>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/limacarofficial" target="_blank" aria-label="facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/limacar.pe/" target="_blank" aria-label="instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@limacar.pe" target="_blank" aria-label="tiktok"><i class="fab fa-tiktok"></i></a>
+        </div>
+    </div>
+
+    <header>
+        <a href="/index.html"><div class="logo"><img src="assets/logo.jpg" alt="LimaCar.pe"></div></a>
+        <nav>
+            <a href="#" class="inicio-btn">INICIO</a>
+            <a href="/compra.html">COMPRA TU AUTO</a>
+            <a href="/vende.html">VENDE TU AUTO</a>
+        </nav>
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-logo">LimaCar<span>.pe</span></div>
+            <button class="mobile-menu-close" onclick="toggleMenu()">×</button>
+        </div>
+        
+        <a href="/index.html" onclick="toggleMenu()" class="mobile-menu-button">
+            <div class="mobile-menu-button-content">
+                <div class="mobile-menu-icon black"><i class="fas fa-home"></i></div>
+                <span>Inicio</span>
+            </div>
+            <div class="mobile-menu-arrow">›</div>
+        </a>
+        
+        <a href="/compra.html" onclick="toggleMenu()" class="mobile-menu-button">
+            <div class="mobile-menu-button-content">
+                <div class="mobile-menu-icon blue"><i class="fas fa-shopping-cart"></i></div>
+                <span>Comprar Auto</span>
+            </div>
+            <div class="mobile-menu-arrow">›</div>
+        </a>
+        
+        <a href="/vende.html" onclick="toggleMenu()" class="mobile-menu-button">
+            <div class="mobile-menu-button-content">
+                <div class="mobile-menu-icon blue"><i class="fas fa-hand-holding-usd"></i></div>
+                <span>Vender Auto</span>
+            </div>
+            <div class="mobile-menu-arrow">›</div>
+        </a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Encuentra tu auto perfecto</h1>
+            <div class="hero-buttons">
+                <button onclick="window.location.href='/compra.html'">Comprar un Auto</button>
+                <button onclick="window.location.href='/vende.html'">Vender tu Auto</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="inventory-header" id="inventory">
+        <h2>AUTOS DISPONIBLES EN TIENDA</h2>
+        <p>Dale una mirada a los autos que tenemos en tienda sin previa cita.</p>
+    </section>
+
+    <div class="loading" id="loading">Cargando inventario desde Google Sheets...</div>
+    <div class="car-grid-wrapper" id="carouselWrapper" style="display: none;">
+        <button class="carousel-arrow prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+        <div class="car-grid" id="carGrid"></div>
+        <button class="carousel-arrow next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="modal" id="carModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle"></h2>
+                    <div class="car-code-modal" id="modalCode"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-gallery">
+                    <div class="share-buttons">
+                        <button class="share-btn" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i></button>
+                    </div>
+                    <button class="gallery-nav prev" onclick="changeImage(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <img id="modalImage" src="" alt="" class="modal-main-image">
+                    <button class="gallery-nav next" onclick="changeImage(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="modal-details">
+                    <div class="modal-price" id="modalPrice"></div>
+                    <div class="detail-table" id="detailTable"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="brands-section" id="brands">
+        <h2>MARCAS QUE OFRECEMOS</h2>
+        <div class="loading" id="brandsLoading">Cargando marcas...</div>
+        <div class="brands-grid" id="brandsGrid" style="display: none;"></div>
+        <button class="more-brands-btn" id="moreBrandsBtn" style="display: none;" onclick="window.location.href='/compra.html'">
+            <i class="fas fa-car"></i> MÁS MARCAS
+        </button>
+    </section>
+    
+    <section class="stats-section">
+        <div class="stat-item">
+            <h3 id="statsVehicles">16</h3>
+            <p>VEHÍCULOS DISPONIBLES</p>
+        </div>
+        <div class="stat-item">
+            <h3 id="statsBrands">36</h3>
+            <p>MARCAS QUE MANEJAMOS</p>
+        </div>
+    </section>
+
+    <footer id="sell">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">LimaCar<span>.pe</span></div>
+                <p>LimaCar donde tu próximo auto te está esperando</p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/limacarofficial" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/limacar.pe/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@limacar.pe" target="_blank"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3><i class="fas fa-briefcase"></i> Nuestros Servicios</h3>
+                <a href="/compra.html"><i class="fas fa-car"></i> Ver Inventario</a>
+                <a href="/vende.html"><i class="fas fa-handshake"></i> Vende tu Auto</a>
+            </div>
+            <div class="footer-section">
+                <h3><i class="fas fa-map-marker-alt"></i> Contáctanos</h3>
+                <p><strong>Oficina Principal</strong><br>Av. San Juan 195, San Luis - Lima</p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:limacar@gmail.com.pe">limacar@gmail.com.pe</a></p>
+                <p><i class="fas fa-phone"></i> <a href="tel:964215296">964 215 296</a></p>
+            </div>
+            <div class="footer-section">
+                <h3><i class="fas fa-clock"></i> Horarios de Atención</h3>
+                <div class="schedule-row"><span>Lun - Vie:</span><span style="color: #1a1a1a;">9:00 AM - 6:00 PM</span></div>
+                <div class="schedule-row"><span>Sábado:</span><span style="color: #1a1a1a;">9:00 AM - 1:00 PM</span></div>
+                <div class="schedule-row"><span>Domingos:</span><span style="color: #1a1a1a;">Cerrado</span></div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 LimaCar.pe - Todos los derechos reservados</p>
+            <div class="footer-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Reclamos</a>
+            </div>
+        </div>
+    </footer>
+
+    <button class="contact-btn" onclick="window.open('https://wa.me/51964215296', '_blank')">
+        <i class="fab fa-whatsapp"></i> Contáctanos
+    </button>
+
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCpn_tIecMIdd2zWzx8DVqv0-8GQK7S86DeBjLOGfyzu7llrcdV-ViYDItMHW6_RZ3tumDAtsGGFI0/pub?gid=0&single=true&output=csv';
+        const BRANDS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCpn_tIecMIdd2zWzx8DVqv0-8GQK7S86DeBjLOGfyzu7llrcdV-ViYDItMHW6_RZ3tumDAtsGGFI0/pub?gid=685298656&single=true&output=csv';
+        
+        let currentCar = null;
+        let currentImageIndex = 0;
+        let carImages = [];
+        let allCars = [];
+
+        function convertGoogleDriveURL(url) {
+            if (!url) return null;
+            if (url.includes('drive.usercontent.google.com')) return url;
+            if (url.includes('/uc?export=view&id=')) {
+                const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+                if (idMatch) return `https://drive.usercontent.google.com/download?id=${idMatch[1]}&export=view`;
+                return url;
+            }
+            if (url.includes('ibb.co') && !url.includes('i.ibb.co')) return null;
+            if (url.includes('cloudinary.com') && !url.match(/\.(jpg|jpeg|png|gif|webp)$/i)) return url + '.jpg';
+            const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (fileMatch) return `https://drive.usercontent.google.com/download?id=${fileMatch[1]}&export=view`;
+            const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (idMatch) return `https://drive.usercontent.google.com/download?id=${idMatch[1]}&export=view`;
+            return url;
+        }
+
+        function isValidImageURL(url) {
+            if (!url || url.trim() === '') return false;
+            if (url.includes('ibb.co') && !url.includes('i.ibb.co')) return false;
+            return url.startsWith('http://') || url.startsWith('https://');
+        }
+
+        function getImageURL(car) {
+            if (isValidImageURL(car.ImagenURL)) return convertGoogleDriveURL(car.ImagenURL);
+            const defaultImages = {
+                'Mercedes-Benz': 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800',
+                'BMW': 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800',
+                'Audi': 'https://images.unsplash.com/photo-1610768764270-790fbec18178?w=800',
+                'Toyota': 'https://images.unsplash.com/photo-1629897048514-3dd7414fe72a?w=800',
+                'Honda': 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800',
+                'Ford': 'https://images.unsplash.com/photo-1612825173281-9a193378527e?w=800'
+            };
+            return defaultImages[car.Marca] || 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800';
+        }
+
+        async function loadCars() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim());
+                
+                if (lines.length < 2) {
+                    document.getElementById('loading').innerHTML = '<p style="color: orange;">⚠️ No hay autos en el inventario</p>';
+                    return;
+                }
+                
+                const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+                const cars = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSV(lines[i]);
+                    const car = {};
+                    headers.forEach((h, idx) => {
+                        car[h] = values[idx] ? values[idx].replace(/"/g, '').trim() : '';
+                    });
+                    
+                    if (!car.Estado || car.Estado.toLowerCase() === 'disponible') {
+                        if (car.Marca && car.Modelo && car.Precio) cars.push(car);
+                    }
+                }
+                
+                if (cars.length === 0) {
+                    document.getElementById('loading').innerHTML = '<p style="color: orange;">⚠️ No hay autos disponibles</p>';
+                    return;
+                }
+                
+                allCars = cars;
+                document.getElementById('statsVehicles').textContent = allCars.length;
+                
+                displayCars(allCars.slice(0, 8));
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('carouselWrapper').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: red;">❌ Error al cargar inventario</p>';
+            }
+        }
+
+        function parseCSV(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let char of line) {
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            return result;
+        }
+
+        function cleanValue(value) {
+            if (!value) return '';
+            value = value.trim();
+            if (value === '__' || value === 'ddd' || value === 'sss' || value.match(/^[_dsx]+$/i)) return '';
+            return value;
+        }
+
+        function displayCars(cars) {
+            const grid = document.getElementById('carGrid');
+            if (cars.length === 0) {
+                grid.innerHTML = '<p style="padding: 3rem; text-align: center; width: 100%;">No hay autos disponibles</p>';
+                return;
+            }
+            
+            grid.innerHTML = cars.map((car, index) => {
+                const imageURL = getImageURL(car);
+                const buttonClass = index === 0 ? 'black' : '';
+                const combustible = cleanValue(car.Combustible) || 'Gasolina';
+                const transmision = cleanValue(car.Transmision) || 'Automático';
+                const tipo = cleanValue(car.Tipo) || 'USADO ÚNICO';
+                const kilometraje = car.Kilometraje && !isNaN(car.Kilometraje) ? Number(car.Kilometraje).toLocaleString() + ' km' : '100 km';
+                
+                return `
+                <div class="car-card" onclick='openModal(${JSON.stringify(car).replace(/'/g, "&#39;")}, ${index})'>
+                    <div class="car-image-container">
+                        <div class="car-badge">${tipo.toUpperCase()}</div>
+                        <img src="${imageURL}" alt="${car.Marca} ${car.Modelo}" class="car-image" onerror="this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800';">
+                    </div>
+                    <div class="car-info">
+                        <div class="car-title">${car.Marca}<br>${car.Modelo}</div>
+                        <div class="car-code">#${car.Codigo || 'AUTO' + String(index + 1).padStart(4, '0')}</div>
+                        <div class="car-specs">
+                            <span><i class="fas fa-gauge"></i> ${kilometraje}</span>
+                            <span><i class="fas fa-gas-pump"></i> ${combustible}</span>
+                            <span><i class="fas fa-cog"></i> ${transmision}</span>
+                            <span><i class="fas fa-calendar"></i> ${car.Año}</span>
+                        </div>
+                        <div class="car-price">$ ${Number(car.Precio).toLocaleString()}</div>
+                        <button class="car-btn ${buttonClass}">Ver Detalles</button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function openModal(car, index) {
+            currentCar = car;
+            currentImageIndex = 0;
+            carImages = [];
+            
+            const mainImage = getImageURL(car);
+            if (mainImage) carImages.push(mainImage);
+            
+            for (let i = 2; i <= 10; i++) {
+                const imageKey = `ImagenURL${i}`;
+                if (car[imageKey] && isValidImageURL(car[imageKey])) {
+                    const additionalImage = convertGoogleDriveURL(car[imageKey]);
+                    if (additionalImage) carImages.push(additionalImage);
+                }
+            }
+            
+            if (carImages.length === 0) carImages = [getImageURL(car)];
+            
+            document.getElementById('modalTitle').innerHTML = `${car.Marca} ${car.Modelo} ${car.Año}`;
+            document.getElementById('modalCode').textContent = `#${car.Codigo || 'AUTO' + String(index + 1).padStart(4, '0')}`;
+            document.getElementById('modalImage').src = carImages[0];
+            document.getElementById('modalPrice').textContent = `$ ${Number(car.Precio).toLocaleString()}`;
+            
+            const prevBtn = document.querySelector('.gallery-nav.prev');
+            const nextBtn = document.querySelector('.gallery-nav.next');
+            if (carImages.length > 1) {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+            } else {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            }
+            
+            const detailsHTML = `
+                <div class="detail-row"><div class="detail-label">AÑO</div><div class="detail-value">${car.Año || '2024'}</div></div>
+                <div class="detail-row"><div class="detail-label">CARROCERÍA</div><div class="detail-value">${cleanValue(car.Carroceria) || 'SUV'}</div></div>
+                <div class="detail-row"><div class="detail-label">COLOR</div><div class="detail-value">${cleanValue(car.Color) || 'Gris'}</div></div>
+                <div class="detail-row"><div class="detail-label">COMBUSTIBLE</div><div class="detail-value">${cleanValue(car.Combustible) || 'Gasolina'}</div></div>
+                <div class="detail-row"><div class="detail-label">KILOMETRAJE</div><div class="detail-value">${car.Kilometraje && !isNaN(car.Kilometraje) ? Number(car.Kilometraje).toLocaleString() + ' km' : '100 km'}</div></div>
+                <div class="detail-row"><div class="detail-label">TRANSMISIÓN</div><div class="detail-value">${cleanValue(car.Transmision) || 'Automático'}</div></div>
+                <div class="detail-row"><div class="detail-label">TRACCIÓN</div><div class="detail-value">${cleanValue(car.Traccion) || '4x2'}</div></div>
+                <div class="detail-row"><div class="detail-label">MOTOR</div><div class="detail-value">${cleanValue(car.Motor) || '3.0L V6'}</div></div>
+                <div class="detail-row"><div class="detail-label">PUERTAS</div><div class="detail-value">${cleanValue(car.Puertas) || '4'}</div></div>
+                <div class="detail-row"><div class="detail-label">FACTURABLE</div><div class="detail-value">${cleanValue(car.Facturable) || 'Sí'}</div></div>
+                <div class="detail-row"><div class="detail-label">SERVICIO</div><div class="detail-value">${cleanValue(car.Servicio) || 'Divemotor'}</div></div>
+                <div class="detail-row"><div class="detail-label">UBICACIÓN</div><div class="detail-value">${cleanValue(car.Ubicacion) || 'San Isidro'}</div></div>
+            `;
+            document.getElementById('detailTable').innerHTML = detailsHTML;
+            
+            const detailsContainer = document.querySelector('.modal-details');
+            const existingBtn = detailsContainer.querySelector('.whatsapp-contact-btn');
+            if (!existingBtn) {
+                const whatsappBtn = document.createElement('button');
+                whatsappBtn.className = 'whatsapp-contact-btn';
+                whatsappBtn.onclick = shareOnWhatsApp;
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Consultar por WhatsApp';
+                detailsContainer.appendChild(whatsappBtn);
+            }
+            
+            document.getElementById('carModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('carModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function changeImage(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) currentImageIndex = carImages.length - 1;
+            if (currentImageIndex >= carImages.length) currentImageIndex = 0;
+            document.getElementById('modalImage').src = carImages[currentImageIndex];
+        }
+
+        function scrollCarousel(direction) {
+            const grid = document.getElementById('carGrid');
+            grid.scrollBy({ left: direction * 370, behavior: 'smooth' });
+        }
+
+        function shareOnWhatsApp() {
+            if (currentCar) {
+                const message = `Hola! Estoy interesado en este auto: ${currentCar.Marca} ${currentCar.Modelo} ${currentCar.Año}. Me gustaría obtener más información.`;
+                window.open(`https://wa.me/51964215296?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        function filterByBrand(brandName) {
+            window.location.href = `/compra.html?marca=${encodeURIComponent(brandName)}`;
+        }
+
+        async function loadBrands() {
+            try {
+                const response = await fetch(BRANDS_SHEET_URL);
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim());
+                
+                if (lines.length < 2) {
+                    showDefaultBrands();
+                    return;
+                }
+                
+                const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+                const brands = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSV(lines[i]);
+                    const brand = {};
+                    headers.forEach((h, idx) => {
+                        brand[h] = values[idx] ? values[idx].replace(/"/g, '').trim() : '';
+                    });
+                    if (brand.Marca) brands.push(brand);
+                }
+                
+                if (brands.length === 0) {
+                    showDefaultBrands();
+                    return;
+                }
+                
+                document.getElementById('statsBrands').textContent = brands.length;
+                
+                displayBrands(brands);
+                document.getElementById('brandsLoading').style.display = 'none';
+                document.getElementById('brandsGrid').style.display = 'grid';
+                document.getElementById('moreBrandsBtn').style.display = 'block';
+            } catch (error) {
+                showDefaultBrands();
+            }
+        }
+
+        function displayBrands(brands) {
+            const grid = document.getElementById('brandsGrid');
+            grid.innerHTML = brands.map(brand => {
+                if (brand.LogoURL && isValidImageURL(brand.LogoURL)) {
+                    const logoURL = convertGoogleDriveURL(brand.LogoURL);
+                    return `
+                    <div class="brand-item" onclick="filterByBrand('${brand.Marca}')">
+                        <div class="brand-logo-wrapper">
+                            <img src="${logoURL}" alt="${brand.Marca}" onerror="this.parentElement.innerHTML='<div class=\\'brand-emoji\\'>🚗</div>';">
+                        </div>
+                        <p>${brand.Marca}</p>
+                    </div>`;
+                } else {
+                    return `
+                    <div class="brand-item" onclick="filterByBrand('${brand.Marca}')">
+                        <div class="brand-logo-wrapper">
+                            <div class="brand-emoji">🚗</div>
+                        </div>
+                        <p>${brand.Marca}</p>
+                    </div>`;
+                }
+            }).join('');
+        }
+
+        function showDefaultBrands() {
+            const defaultBrands = ['BMW', 'Audi', 'Mercedes Benz', 'Porsche', 'Land Rover', 'Mini', 'Subaru', 'Honda', 'Toyota', 'Jaguar', 'Ford', 'Nissan', 'Kia', 'Mazda', 'Chevrolet'];
+            const grid = document.getElementById('brandsGrid');
+            grid.innerHTML = defaultBrands.map(brand => `
+                <div class="brand-item" onclick="filterByBrand('${brand}')">
+                    <div class="brand-logo-wrapper">
+                        <div class="brand-emoji">🚗</div>
+                    </div>
+                    <p>${brand}</p>
+                </div>
+            `).join('');
+            document.getElementById('brandsLoading').style.display = 'none';
+            document.getElementById('brandsGrid').style.display = 'grid';
+            document.getElementById('statsBrands').textContent = defaultBrands.length;
+            document.getElementById('moreBrandsBtn').style.display = 'block';
+        }
+
+        document.getElementById('carModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        loadCars();
+        loadBrands();
+    </script>
+</body>
+</html>

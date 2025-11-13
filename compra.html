@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/logo.jpg">
+    <title>Compra tu Auto - LimaCar.pe</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        color: #333;
+        background: #f8f8f8;
+      }
+
+      .top-bar {
+        background: #333;
+        color: white;
+        padding: 0.6rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+      }
+      .top-bar-left {
+        display: flex;
+        gap: 2.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .top-bar__item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .top-bar__item i {
+        color: white;
+        font-size: 0.9rem;
+      }
+      .top-bar__link {
+        color: white;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .social-icons {
+        display: flex;
+        gap: 0.6rem;
+      }
+      .social-icons a {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #1877f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        transition: transform 0.2s;
+        font-size: 1rem;
+      }
+      .social-icons a:hover {
+        transform: scale(1.05);
+      }
+
+      header {
+        background: white;
+        padding: 0.5rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      }
+      .logo img {
+        height: 90px;
+        width: auto;
+        object-fit: contain;
+      }
+      nav {
+        display: flex;
+        gap: 2.5rem;
+        align-items: center;
+      }
+      nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        font-size: 1.05rem;
+        transition: color 0.3s;
+      }
+      nav a:hover {
+        color: #014bae;
+      }
+      nav a.inicio-btn {
+        background: #1a1a1a;
+        color: white;
+        padding: 0.7rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      nav a.inicio-btn:hover {
+        background: #333;
+      }
+
+      .menu-toggle {
+        display: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #014bae;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1.3rem;
+        align-items: center;
+        justify-content: center;
+      }
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        max-width: 400px;
+        height: 100vh;
+        background: linear-gradient(135deg, #014bae 0%, #012a6b 100%);
+        z-index: 9999;
+        transition: left 0.3s;
+        padding: 2rem 1.5rem;
+        overflow-y: auto;
+      }
+      .mobile-menu.active {
+        left: 0;
+        display: block;
+      }
+      .mobile-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+      }
+      .mobile-menu-logo {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+      .mobile-menu-logo span {
+        color: #1a1a1a;
+      }
+      .mobile-menu-close {
+        background: white;
+        color: #014bae;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mobile-menu-button {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        padding: 1.2rem 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: white;
+        width: 100%;
+      }
+      .mobile-menu-button:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(5px);
+      }
+      .mobile-menu-button-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .mobile-menu-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+      }
+      .mobile-menu-icon.black {
+        background: #1a1a1a;
+      }
+      .mobile-menu-icon.blue {
+        background: #003580;
+      }
+      .mobile-menu-button span {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      .mobile-menu-arrow {
+        color: white;
+        font-size: 1.2rem;
+        opacity: 0.7;
+      }
+      .menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9998;
+      }
+      .menu-overlay.active {
+        display: block;
+      }
+
+      .search-section {
+        background: white;
+        padding: 2rem 5% 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+      .search-bar {
+        display: flex;
+        align-items: center;
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border: 2px solid #014bae;
+        border-radius: 50px;
+        overflow: hidden;
+      }
+      .search-icon {
+        background: #014bae;
+        color: white;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+      .search-bar input {
+        flex: 1;
+        border: none;
+        padding: 1rem 1.5rem;
+        font-size: 1.05rem;
+        outline: none;
+      }
+
+      .filters-desktop {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 1.5rem auto 0;
+        align-items: flex-end;
+      }
+      .filter-group {
+        flex: 1;
+      }
+      .filter-group label {
+        display: block;
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 0.4rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .filter-group select {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        background: white;
+        cursor: pointer;
+        transition: border 0.3s;
+      }
+      .filter-group select:focus {
+        border-color: #014bae;
+        outline: none;
+      }
+      .clear-filters-btn {
+        padding: 0.8rem 1.5rem;
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+      .clear-filters-btn:hover {
+        background: #d0d0d0;
+      }
+      .clear-filters-btn i {
+        margin-right: 0.5rem;
+      }
+
+      .filters-mobile {
+        display: none;
+      }
+      .filter-btn-mobile {
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        padding: 0.9rem 2rem;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        margin: 1rem auto;
+        max-width: 300px;
+        display: block;
+      }
+      .filter-btn-mobile:hover {
+        background: #333;
+      }
+      .filter-btn-mobile i {
+        margin-right: 0.5rem;
+      }
+
+      .results-header {
+        background: white;
+        padding: 1.5rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid #014bae;
+        border-top: 3px solid #1a1a1a;
+      }
+      .results-count {
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+      .results-count span {
+        color: #014bae;
+      }
+      .page-info {
+        background: #014bae;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 50px;
+        font-weight: 600;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 3rem;
+        font-size: 1.2rem;
+        color: #666;
+      }
+
+      .cars-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+        padding: 2rem 5%;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .car-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s;
+        cursor: pointer;
+      }
+      .car-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.12);
+      }
+      .car-image-container {
+        position: relative;
+        width: 100%;
+        height: 280px;
+        overflow: hidden;
+      }
+      .car-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #014bae;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        z-index: 1;
+        text-transform: uppercase;
+      }
+      .car-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .car-info {
+        padding: 1.5rem;
+      }
+      .car-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        text-align: center;
+      }
+      .car-code {
+        color: #999;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      .car-specs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+        margin-bottom: 1.2rem;
+      }
+      .car-specs span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+      }
+      .car-specs i {
+        color: #014bae;
+      }
+      .car-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #014bae;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .car-btn {
+        width: 100%;
+        padding: 0.9rem;
+        background: #014bae;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .car-btn:hover {
+        background: #003580;
+      }
+
+      .pagination {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        padding: 2rem 0;
+      }
+      .pagination button {
+        width: 45px;
+        height: 45px;
+        border: 2px solid #e0e0e0;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+      .pagination button:hover:not(:disabled) {
+        border-color: #014bae;
+        color: #014bae;
+      }
+      .pagination button.active {
+        background: #1a1a1a;
+        border-color: #1a1a1a;
+        color: white;
+      }
+      .pagination button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(1, 75, 174, 0.95);
+        animation: fadeIn 0.3s;
+      }
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        max-width: 1200px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        animation: slideUp 0.3s;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem;
+        background: #014bae;
+        color: white;
+        border-radius: 20px 20px 0 0;
+      }
+      .modal-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .modal-header .car-code-modal {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+      .modal-close {
+        background: white;
+        color: #014bae;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+      .modal-close:hover {
+        transform: rotate(90deg);
+        background: #f0f0f0;
+      }
+      .modal-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .modal-gallery {
+        position: relative; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+      }
+      .modal-main-image {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-bottom: 1rem;    
+      }
+      .gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+      .gallery-nav:hover {
+        background: white;
+        transform: translateY(-50%) scale(1.1);
+      }
+      .gallery-nav.prev {
+        left: 10px;
+      }
+      .gallery-nav.next {
+        right: 10px;
+      }
+      .share-buttons {
+        display: none;
+      }
+      .modal-details {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .modal-price {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #014bae;
+      }
+      .detail-table {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        background: #f8f8f8;
+        padding: 1.5rem;
+        border-radius: 10px;
+      }
+      .detail-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .detail-label {
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .detail-value {
+        font-size: 1rem;
+        color: #333;
+        font-weight: 600;
+      }
+      .whatsapp-contact-btn {
+        width: 100%;
+        padding: 1.2rem;
+        background: #25d366;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        margin-top: 1rem;
+      }
+      .whatsapp-contact-btn:hover {
+        background: #20ba5a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+      }
+      .whatsapp-contact-btn i {
+        font-size: 1.5rem;
+      }
+      .filter-modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+      }
+      .filter-modal.active {
+        display: flex;
+        align-items: flex-end;
+      }
+      .filter-modal-content {
+        background: white;
+        width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 20px 20px 0 0;
+        padding: 1.5rem;
+      }
+      .filter-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .filter-modal-header h3 {
+        font-size: 1.5rem;
+      }
+      .filter-modal-close {
+        background: #e0e0e0;
+        border: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        cursor: pointer;
+      }
+      .filter-modal-group {
+        margin-bottom: 1.5rem;
+      }
+      .filter-modal-group label {
+        display: block;
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .filter-modal-group select {
+        width: 100%;
+        padding: 0.9rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+      }
+      .filter-modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .filter-modal-actions button {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-clear {
+        background: #e0e0e0;
+        color: #333;
+      }
+      .btn-apply {
+        background: #014bae;
+        color: white;
+      }
+
+      footer {
+        background: #014bae;
+        color: white;
+        padding: 3rem 5% 1rem;
+        margin-top: 3rem;
+      }
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        max-width: 1400px;
+        margin: 0 auto 2rem;
+      }
+      .footer-section h3 {
+        margin-bottom: 1.5rem;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .footer-section h3 i {
+        font-size: 1.2rem;
+      }
+      .footer-section p,
+      .footer-section a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 0.8rem;
+        line-height: 1.6;
+      }
+      .footer-section a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .footer-section a i {
+        font-size: 1rem;
+      }
+      .footer-section a:hover {
+        color: #1a1a1a;
+      }
+      .footer-logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+      .footer-logo span {
+        color: #1a1a1a;
+      }
+      .footer-section .social-icons {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.8rem;
+      }
+      .schedule-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+      }
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .footer-links a:hover {
+        color: #1a1a1a;
+      }
+
+      .contact-btn {
+        background: #1a1a1a;
+        color: white;
+        padding: 1rem 2.2rem;
+        border-radius: 30px;
+        border: none;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        position: fixed;
+        bottom: 2.5rem;
+        right: 2.5rem;
+        z-index: 999;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        transition: all 0.3s;
+      }
+      .contact-btn:hover {
+        background: #333;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 968px) {
+        .modal-body {
+          grid-template-columns: 1fr;
+        }
+        .detail-table {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .top-bar {
+          display: none;
+        }
+        header {
+          padding: 1rem 3%;
+        }
+        .logo img {
+          height: 60px;
+        }
+        nav {
+          display: none !important;
+        }
+        .menu-toggle {
+          display: flex;
+        }
+        .search-section {
+          padding: 1rem 3%;
+        }
+        .search-icon {
+          width: 50px;
+          height: 50px;
+        }
+        .search-bar input {
+          font-size: 0.95rem;
+          padding: 0.8rem 1rem;
+        }
+        .filters-desktop {
+          display: none;
+        }
+        .filters-mobile {
+          display: block;
+        }
+        .results-header {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+        .results-count {
+          font-size: 1.1rem;
+        }
+        .cars-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+          padding: 1.5rem 3%;
+        }
+        .car-image-container {
+          height: 250px;
+        }
+        .modal-content {
+          width: 95%;
+        }
+        .modal-header {
+          padding: 1.5rem;
+        }
+        .modal-header h2 {
+          font-size: 1.5rem;
+        }
+        .modal-body {
+          padding: 1.5rem;
+        }
+        .modal-main-image {
+          height: 250px;
+        }
+        .modal-price {
+          font-size: 2rem;
+        }
+        .footer-content {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+          text-align: center;
+        }
+        .footer-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .footer-section h3 {
+          justify-content: center;
+        }
+        .footer-section a {
+          justify-content: center;
+        }
+        .footer-section .social-icons {
+          justify-content: center;
+        }
+        .schedule-row {
+          max-width: 300px;
+        }
+        .contact-btn {
+          bottom: 1.5rem;
+          right: 1.5rem;
+          padding: 0.8rem 1.5rem;
+          font-size: 0.95rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .modal-main-image {
+          height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <div class="top-bar__item">
+          <i class="fas fa-phone"></i>
+          <a href="tel:964215296" class="top-bar__link">964 215 296</a>
+        </div>
+        <div class="top-bar__item">
+          <i class="fas fa-envelope"></i>
+          <a href="mailto:limacar@gmail.com.pe" class="top-bar__link"
+            >limacar@gmail.com.pe</a
+          >
+        </div>
+        <div class="top-bar__item">
+          <i class="fas fa-clock"></i>
+          <span class="top-bar__link"
+            >Lun - Vie: 9am a 6pm | Sab: 9am a 1pm</span
+          >
+        </div>
+      </div>
+      <div class="social-icons">
+        <a
+          href="https://www.facebook.com/limacarofficial"
+          target="_blank"
+          aria-label="facebook"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        <a
+          href="https://www.instagram.com/limacar.pe/"
+          target="_blank"
+          aria-label="instagram"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.tiktok.com/@limacar.pe"
+          target="_blank"
+          aria-label="tiktok"
+          ><i class="fab fa-tiktok"></i
+        ></a>
+      </div>
+    </div>
+
+    <header>
+      <a href="/index.html"
+        ><div class="logo"><img src="assets/logo.jpg" alt="LimaCar.pe" /></div
+      ></a>
+      <nav>
+        <a href="/index.html">INICIO</a>
+        <a href="/compra.html" class="inicio-btn">COMPRA TU AUTO</a>
+        <a href="/vende.html">VENDE TU AUTO</a>
+      </nav>
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-header">
+        <div class="mobile-menu-logo">LimaCar<span>.pe</span></div>
+        <button class="mobile-menu-close" onclick="toggleMenu()">×</button>
+      </div>
+
+      <a href="/index.html" onclick="toggleMenu()" class="mobile-menu-button">
+        <div class="mobile-menu-button-content">
+          <div class="mobile-menu-icon blue"><i class="fas fa-home"></i></div>
+          <span>Inicio</span>
+        </div>
+        <div class="mobile-menu-arrow">›</div>
+      </a>
+
+      <a href="/compra.html" onclick="toggleMenu()" class="mobile-menu-button">
+        <div class="mobile-menu-button-content">
+          <div class="mobile-menu-icon black">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <span>Comprar Auto</span>
+        </div>
+        <div class="mobile-menu-arrow">›</div>
+      </a>
+
+      <a href="/vende.html" onclick="toggleMenu()" class="mobile-menu-button">
+        <div class="mobile-menu-button-content">
+          <div class="mobile-menu-icon blue">
+            <i class="fas fa-hand-holding-usd"></i>
+          </div>
+          <span>Vender Auto</span>
+        </div>
+        <div class="mobile-menu-arrow">›</div>
+      </a>
+    </div>
+
+    <section class="search-section">
+      <div class="search-bar">
+        <div class="search-icon"><i class="fas fa-search"></i></div>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar por marca, modelo, año, color..."
+        />
+      </div>
+
+      <div class="filters-desktop">
+        <div class="filter-group">
+          <label>Marca</label>
+          <select id="filterMarca">
+            <option value="">Todas las marcas</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Modelo</label>
+          <select id="filterModelo">
+            <option value="">Todos los modelos</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Precio</label>
+          <select id="filterPrecio">
+            <option value="">Todos los precios</option>
+            <option value="0-10000">$0 - $10,000</option>
+            <option value="10000-15000">$10,000 - $15,000</option>
+            <option value="15000-20000">$15,000 - $20,000</option>
+            <option value="20000-30000">$20,000 - $30,000</option>
+            <option value="30000-50000">$30,000 - $50,000</option>
+            <option value="50000-999999">Más de $50,000</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Año</label>
+          <select id="filterAño">
+            <option value="">Todos los años</option>
+          </select>
+        </div>
+        <button class="clear-filters-btn" onclick="clearFilters()">
+          <i class="fas fa-times-circle"></i> Limpiar
+        </button>
+      </div>
+
+      <div class="filters-mobile">
+        <button class="filter-btn-mobile" onclick="openFilterModal()">
+          <i class="fas fa-filter"></i> Filtros
+        </button>
+      </div>
+    </section>
+
+    <div class="results-header">
+      <div class="results-count">
+        <span id="totalResults">0</span> resultados
+      </div>
+      <div class="page-info">
+        <span id="currentPage">1</span> de
+        <span id="totalPages">1</span> páginas
+      </div>
+    </div>
+
+    <div class="loading" id="loading">Cargando inventario...</div>
+    <div class="cars-grid" id="carsGrid"></div>
+
+    <div class="pagination" id="pagination"></div>
+
+    <div class="filter-modal" id="filterModal">
+      <div class="filter-modal-content">
+        <div class="filter-modal-header">
+          <h3>Filtros</h3>
+          <button class="filter-modal-close" onclick="closeFilterModal()">
+            ×
+          </button>
+        </div>
+
+        <div class="filter-modal-group">
+          <label>Marca</label>
+          <select id="filterMarcaMobile">
+            <option value="">Todas las marcas</option>
+          </select>
+        </div>
+
+        <div class="filter-modal-group">
+          <label>Modelo</label>
+          <select id="filterModeloMobile">
+            <option value="">Todos los modelos</option>
+          </select>
+        </div>
+
+        <div class="filter-modal-group">
+          <label>Precio</label>
+          <select id="filterPrecioMobile">
+            <option value="">Todos los precios</option>
+            <option value="0-10000">$0 - $10,000</option>
+            <option value="10000-15000">$10,000 - $15,000</option>
+            <option value="15000-20000">$15,000 - $20,000</option>
+            <option value="20000-30000">$20,000 - $30,000</option>
+            <option value="30000-50000">$30,000 - $50,000</option>
+            <option value="50000-999999">Más de $50,000</option>
+          </select>
+        </div>
+
+        <div class="filter-modal-group">
+          <label>Año</label>
+          <select id="filterAñoMobile">
+            <option value="">Todos los años</option>
+          </select>
+        </div>
+
+        <div class="filter-modal-actions">
+          <button class="btn-clear" onclick="clearFilters()">
+            Limpiar Filtros
+          </button>
+          <button class="btn-apply" onclick="applyFilters()">Aplicar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="carModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h2 id="modalTitle"></h2>
+            <div class="car-code-modal" id="modalCode"></div>
+          </div>
+          <button class="modal-close" onclick="closeCarModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-gallery">
+            <button class="gallery-nav prev" onclick="changeImage(-1)">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <img id="modalImage" src="" alt="" class="modal-main-image" />
+            <button class="gallery-nav next" onclick="changeImage(1)">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="modal-details">
+            <div class="modal-price" id="modalPrice"></div>
+            <div class="detail-table" id="detailTable"></div>
+            <button class="whatsapp-contact-btn" onclick="shareOnWhatsApp()">
+              <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">LimaCar<span>.pe</span></div>
+          <p>LimaCar donde tu próximo auto te está esperando</p>
+          <div class="social-icons">
+            <a href="https://www.facebook.com/limacarofficial" target="_blank"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="https://www.instagram.com/limacar.pe/" target="_blank"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="https://www.tiktok.com/@limacar.pe" target="_blank"
+              ><i class="fab fa-tiktok"></i
+            ></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3><i class="fas fa-briefcase"></i> Nuestros Servicios</h3>
+          <a href="/compra.html"><i class="fas fa-car"></i> Ver Inventario</a>
+          <a href="/vende.html"
+            ><i class="fas fa-handshake"></i> Vende tu Auto</a
+          >
+        </div>
+        <div class="footer-section">
+          <h3><i class="fas fa-map-marker-alt"></i> Contáctanos</h3>
+          <p>
+            <strong>Oficina Principal</strong><br />Av. San Juan 195, San Luis -
+            Lima
+          </p>
+          <p>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:limacar@gmail.com.pe">limacar@gmail.com.pe</a>
+          </p>
+          <p>
+            <i class="fas fa-phone"></i> <a href="tel:964215296">964 215 296</a>
+          </p>
+        </div>
+        <div class="footer-section">
+          <h3><i class="fas fa-clock"></i> Horarios de Atención</h3>
+          <div class="schedule-row">
+            <span>Lun - Vie:</span
+            ><span style="color: #1a1a1a">9:00 AM - 6:00 PM</span>
+          </div>
+          <div class="schedule-row">
+            <span>Sábado:</span
+            ><span style="color: #1a1a1a">9:00 AM - 1:00 PM</span>
+          </div>
+          <div class="schedule-row">
+            <span>Domingos:</span><span style="color: #1a1a1a">Cerrado</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 LimaCar.pe - Todos los derechos reservados</p>
+        <div class="footer-links">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+          <a href="#">Reclamos</a>
+        </div>
+      </div>
+    </footer>
+
+    <button
+      class="contact-btn"
+      onclick="window.open('https://wa.me/51964215296', '_blank')"
+    >
+      <i class="fab fa-whatsapp"></i> Contáctanos
+    </button>
+
+    <script>
+      const SHEET_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTCpn_tIecMIdd2zWzx8DVqv0-8GQK7S86DeBjLOGfyzu7llrcdV-ViYDItMHW6_RZ3tumDAtsGGFI0/pub?gid=0&single=true&output=csv";
+
+      let allCars = [];
+      let filteredCars = [];
+      let currentCar = null;
+      let currentImageIndex = 0;
+      let carImages = [];
+      const carsPerPage = 12;
+      let currentPageNum = 1;
+
+      function toggleMenu() {
+        const menu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("menuOverlay");
+        menu.classList.toggle("active");
+        overlay.classList.toggle("active");
+        document.body.style.overflow = menu.classList.contains("active")
+          ? "hidden"
+          : "auto";
+      }
+
+      function convertGoogleDriveURL(url) {
+        if (!url) return null;
+        if (url.includes("/uc?export=view&id=")) return url;
+        if (url.includes("ibb.co") && !url.includes("i.ibb.co")) return null;
+        if (
+          url.includes("cloudinary.com") &&
+          !url.match(/\.(jpg|jpeg|png|gif|webp)$/i)
+        )
+          return url + ".jpg";
+        const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (fileMatch)
+          return `https://drive.google.com/uc?export=view&id=${fileMatch[1]}`;
+        const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (idMatch)
+          return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+        return url;
+      }
+
+      function isValidImageURL(url) {
+        if (!url || url.trim() === "") return false;
+        if (url.includes("ibb.co") && !url.includes("i.ibb.co")) return false;
+        return url.startsWith("http://") || url.startsWith("https://");
+      }
+
+      function getImageURL(car) {
+        if (isValidImageURL(car.ImagenURL))
+          return convertGoogleDriveURL(car.ImagenURL);
+        const defaultImages = {
+          "Mercedes-Benz":
+            "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+          BMW: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+          Audi: "https://images.unsplash.com/photo-1610768764270-790fbec18178?w=800",
+          Toyota:
+            "https://images.unsplash.com/photo-1629897048514-3dd7414fe72a?w=800",
+          Honda:
+            "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800",
+          Ford: "https://images.unsplash.com/photo-1612825173281-9a193378527e?w=800",
+        };
+        return (
+          defaultImages[car.Marca] ||
+          "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"
+        );
+      }
+
+      function parseCSV(line) {
+        const result = [];
+        let current = "";
+        let inQuotes = false;
+        for (let char of line) {
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === "," && !inQuotes) {
+            result.push(current);
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+        result.push(current);
+        return result;
+      }
+
+      function cleanValue(value) {
+        if (!value) return "";
+        value = value.trim();
+        if (
+          value === "__" ||
+          value === "ddd" ||
+          value === "sss" ||
+          value.match(/^[_dsx]+$/i)
+        )
+          return "";
+        return value;
+      }
+
+      async function loadCars() {
+        try {
+          const response = await fetch(SHEET_URL);
+          const text = await response.text();
+          const lines = text.split("\n").filter((line) => line.trim());
+
+          if (lines.length < 2) {
+            document.getElementById("loading").innerHTML =
+              '<p style="color: orange;">⚠️ No hay autos en el inventario</p>';
+            return;
+          }
+
+          const headers = lines[0]
+            .split(",")
+            .map((h) => h.replace(/"/g, "").trim());
+          const cars = [];
+
+          for (let i = 1; i < lines.length; i++) {
+            const values = parseCSV(lines[i]);
+            const car = {};
+            headers.forEach((h, idx) => {
+              car[h] = values[idx] ? values[idx].replace(/"/g, "").trim() : "";
+            });
+
+            if (!car.Estado || car.Estado.toLowerCase() === "disponible") {
+              if (car.Marca && car.Modelo && car.Precio) cars.push(car);
+            }
+          }
+
+          if (cars.length === 0) {
+            document.getElementById("loading").innerHTML =
+              '<p style="color: orange;">⚠️ No hay autos disponibles</p>';
+            return;
+          }
+
+          allCars = cars;
+          filteredCars = cars;
+          populateFilters();
+          displayCars();
+          document.getElementById("loading").style.display = "none";
+        } catch (error) {
+          console.error("Error:", error);
+          document.getElementById("loading").innerHTML =
+            '<p style="color: red;">❌ Error al cargar inventario</p>';
+        }
+      }
+
+      function populateFilters() {
+        const marcas = [...new Set(allCars.map((car) => car.Marca))].sort();
+        const años = [...new Set(allCars.map((car) => car.Año))].sort(
+          (a, b) => b - a
+        );
+
+        const marcaSelects = [
+          document.getElementById("filterMarca"),
+          document.getElementById("filterMarcaMobile"),
+        ];
+        marcaSelects.forEach((select) => {
+          marcas.forEach((marca) => {
+            const option = document.createElement("option");
+            option.value = marca;
+            option.textContent = marca;
+            select.appendChild(option);
+          });
+        });
+
+        const añoSelects = [
+          document.getElementById("filterAño"),
+          document.getElementById("filterAñoMobile"),
+        ];
+        añoSelects.forEach((select) => {
+          años.forEach((año) => {
+            const option = document.createElement("option");
+            option.value = año;
+            option.textContent = año;
+            select.appendChild(option);
+          });
+        });
+      }
+
+      function updateModeloFilter(marca) {
+        const modelos = marca
+          ? [
+              ...new Set(
+                allCars
+                  .filter((car) => car.Marca === marca)
+                  .map((car) => car.Modelo)
+              ),
+            ].sort()
+          : [];
+
+        const modeloSelects = [
+          document.getElementById("filterModelo"),
+          document.getElementById("filterModeloMobile"),
+        ];
+        modeloSelects.forEach((select) => {
+          select.innerHTML = '<option value="">Todos los modelos</option>';
+          modelos.forEach((modelo) => {
+            const option = document.createElement("option");
+            option.value = modelo;
+            option.textContent = modelo;
+            select.appendChild(option);
+          });
+        });
+      }
+
+      document.getElementById("filterMarca").addEventListener("change", (e) => {
+        updateModeloFilter(e.target.value);
+        applyFiltersDesktop();
+      });
+
+      document
+        .getElementById("filterMarcaMobile")
+        .addEventListener("change", (e) => {
+          updateModeloFilter(e.target.value);
+        });
+
+      document
+        .getElementById("filterModelo")
+        .addEventListener("change", applyFiltersDesktop);
+      document
+        .getElementById("filterPrecio")
+        .addEventListener("change", applyFiltersDesktop);
+      document
+        .getElementById("filterAño")
+        .addEventListener("change", applyFiltersDesktop);
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", applyFiltersDesktop);
+
+      function applyFiltersDesktop() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const marca = document.getElementById("filterMarca").value;
+        const modelo = document.getElementById("filterModelo").value;
+        const precio = document.getElementById("filterPrecio").value;
+        const año = document.getElementById("filterAño").value;
+
+        filteredCars = allCars.filter((car) => {
+          const matchSearch =
+            !searchTerm ||
+            car.Marca.toLowerCase().includes(searchTerm) ||
+            car.Modelo.toLowerCase().includes(searchTerm) ||
+            car.Año.toString().includes(searchTerm) ||
+            (car.Color && car.Color.toLowerCase().includes(searchTerm));
+
+          const matchMarca = !marca || car.Marca === marca;
+          const matchModelo = !modelo || car.Modelo === modelo;
+          const matchAño = !año || car.Año === año;
+
+          let matchPrecio = true;
+          if (precio) {
+            const [min, max] = precio.split("-").map(Number);
+            const carPrice = Number(car.Precio);
+            matchPrecio = carPrice >= min && carPrice <= max;
+          }
+
+          return (
+            matchSearch && matchMarca && matchModelo && matchPrecio && matchAño
+          );
+        });
+
+        currentPageNum = 1;
+        displayCars();
+      }
+
+      function displayCars() {
+        const grid = document.getElementById("carsGrid");
+        const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+        const startIndex = (currentPageNum - 1) * carsPerPage;
+        const endIndex = startIndex + carsPerPage;
+        const carsToShow = filteredCars.slice(startIndex, endIndex);
+
+        document.getElementById("totalResults").textContent =
+          filteredCars.length;
+        document.getElementById("currentPage").textContent = currentPageNum;
+        document.getElementById("totalPages").textContent = totalPages || 1;
+
+        if (carsToShow.length === 0) {
+          grid.innerHTML =
+            '<p style="padding: 3rem; text-align: center; grid-column: 1/-1;">No se encontraron autos con estos filtros</p>';
+          document.getElementById("pagination").innerHTML = "";
+          return;
+        }
+
+        grid.innerHTML = carsToShow
+          .map((car, index) => {
+            const imageURL = getImageURL(car);
+            const combustible = cleanValue(car.Combustible) || "Gasolina";
+            const transmision = cleanValue(car.Transmision) || "Automático";
+            const tipo = cleanValue(car.Tipo) || "USADO ÚNICO";
+            const kilometraje =
+              car.Kilometraje && !isNaN(car.Kilometraje)
+                ? Number(car.Kilometraje).toLocaleString() + " km"
+                : "100 km";
+            const globalIndex = startIndex + index;
+
+            return `
+                <div class="car-card" onclick='openCarModal(${JSON.stringify(
+                  car
+                ).replace(/'/g, "&#39;")}, ${globalIndex})'>
+                    <div class="car-image-container">
+                        <div class="car-badge">${tipo.toUpperCase()}</div>
+                        <img src="${imageURL}" alt="${car.Marca} ${
+              car.Modelo
+            }" class="car-image" onerror="this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800';">
+                    </div>
+                    <div class="car-info">
+                        <div class="car-title">${car.Marca} ${car.Modelo}</div>
+                        <div class="car-code">#${
+                          car.Codigo ||
+                          "AUTO" + String(globalIndex + 1).padStart(4, "0")
+                        }</div>
+                        <div class="car-specs">
+                            <span><i class="fas fa-gauge"></i> ${kilometraje}</span>
+                            <span><i class="fas fa-gas-pump"></i> ${combustible}</span>
+                            <span><i class="fas fa-cog"></i> ${transmision}</span>
+                            <span><i class="fas fa-calendar"></i> ${
+                              car.Año
+                            }</span>
+                        </div>
+                        <div class="car-price">$ ${Number(
+                          car.Precio
+                        ).toLocaleString()}</div>
+                        <button class="car-btn">Ver Detalles</button>
+                    </div>
+                </div>
+            `;
+          })
+          .join("");
+
+        renderPagination(totalPages);
+      }
+
+      function renderPagination(totalPages) {
+        const pagination = document.getElementById("pagination");
+        if (totalPages <= 1) {
+          pagination.innerHTML = "";
+          return;
+        }
+
+        let html = "";
+        html += `<button onclick="changePage(${currentPageNum - 1})" ${
+          currentPageNum === 1 ? "disabled" : ""
+        }><i class="fas fa-chevron-left"></i></button>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+          if (
+            i === 1 ||
+            i === totalPages ||
+            (i >= currentPageNum - 1 && i <= currentPageNum + 1)
+          ) {
+            html += `<button class="${
+              i === currentPageNum ? "active" : ""
+            }" onclick="changePage(${i})">${i}</button>`;
+          } else if (i === currentPageNum - 2 || i === currentPageNum + 2) {
+            html += `<button disabled>...</button>`;
+          }
+        }
+
+        html += `<button onclick="changePage(${currentPageNum + 1})" ${
+          currentPageNum === totalPages ? "disabled" : ""
+        }><i class="fas fa-chevron-right"></i></button>`;
+        pagination.innerHTML = html;
+      }
+
+      function changePage(page) {
+        const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentPageNum = page;
+        displayCars();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function openCarModal(car, index) {
+        currentCar = car;
+        currentImageIndex = 0;
+        carImages = [];
+
+        const mainImage = getImageURL(car);
+        if (mainImage) carImages.push(mainImage);
+
+        for (let i = 2; i <= 10; i++) {
+          const imageKey = `ImagenURL${i}`;
+          if (car[imageKey] && isValidImageURL(car[imageKey])) {
+            const additionalImage = convertGoogleDriveURL(car[imageKey]);
+            if (additionalImage) carImages.push(additionalImage);
+          }
+        }
+
+        if (carImages.length === 0) carImages = [getImageURL(car)];
+
+        document.getElementById(
+          "modalTitle"
+        ).innerHTML = `${car.Marca} ${car.Modelo} ${car.Año}`;
+        document.getElementById("modalCode").textContent = `#${
+          car.Codigo || "AUTO" + String(index + 1).padStart(4, "0")
+        }`;
+        document.getElementById("modalImage").src = carImages[0];
+        document.getElementById("modalPrice").textContent = `$ ${Number(
+          car.Precio
+        ).toLocaleString()}`;
+
+        const prevBtn = document.querySelector(".gallery-nav.prev");
+        const nextBtn = document.querySelector(".gallery-nav.next");
+        if (carImages.length > 1) {
+          prevBtn.style.display = "flex";
+          nextBtn.style.display = "flex";
+        } else {
+          prevBtn.style.display = "none";
+          nextBtn.style.display = "none";
+        }
+
+        const detailsHTML = `
+                <div class="detail-row"><div class="detail-label">AÑO</div><div class="detail-value">${
+                  car.Año || "2024"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">CARROCERÍA</div><div class="detail-value">${
+                  cleanValue(car.Carroceria) || "SUV"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">COLOR</div><div class="detail-value">${
+                  cleanValue(car.Color) || "Gris"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">COMBUSTIBLE</div><div class="detail-value">${
+                  cleanValue(car.Combustible) || "Gasolina"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">KILOMETRAJE</div><div class="detail-value">${
+                  car.Kilometraje && !isNaN(car.Kilometraje)
+                    ? Number(car.Kilometraje).toLocaleString() + " km"
+                    : "100 km"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">TRANSMISIÓN</div><div class="detail-value">${
+                  cleanValue(car.Transmision) || "Automático"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">TRACCIÓN</div><div class="detail-value">${
+                  cleanValue(car.Traccion) || "4x2"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">MOTOR</div><div class="detail-value">${
+                  cleanValue(car.Motor) || "3.0L V6"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">PUERTAS</div><div class="detail-value">${
+                  cleanValue(car.Puertas) || "4"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">FACTURABLE</div><div class="detail-value">${
+                  cleanValue(car.Facturable) || "Sí"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">SERVICIO</div><div class="detail-value">${
+                  cleanValue(car.Servicio) || "Divemotor"
+                }</div></div>
+                <div class="detail-row"><div class="detail-label">UBICACIÓN</div><div class="detail-value">${
+                  cleanValue(car.Ubicacion) || "San Isidro"
+                }</div></div>
+            `;
+        document.getElementById("detailTable").innerHTML = detailsHTML;
+
+        document.getElementById("carModal").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeCarModal() {
+        document.getElementById("carModal").classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      function changeImage(direction) {
+        currentImageIndex += direction;
+        if (currentImageIndex < 0) currentImageIndex = carImages.length - 1;
+        if (currentImageIndex >= carImages.length) currentImageIndex = 0;
+        document.getElementById("modalImage").src =
+          carImages[currentImageIndex];
+      }
+
+      function shareOnWhatsApp() {
+        if (currentCar) {
+          const message = `Hola! Estoy interesado en este auto: ${currentCar.Marca} ${currentCar.Modelo} ${currentCar.Año}. Me gustaría obtener más información.`;
+          window.open(
+            `https://wa.me/51964215296?text=${encodeURIComponent(message)}`,
+            "_blank"
+          );
+        }
+      }
+
+      function openFilterModal() {
+        document.getElementById("filterModal").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeFilterModal() {
+        document.getElementById("filterModal").classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      function clearFilters() {
+        document.getElementById("filterMarcaMobile").value = "";
+        document.getElementById("filterModeloMobile").value = "";
+        document.getElementById("filterPrecioMobile").value = "";
+        document.getElementById("filterAñoMobile").value = "";
+        document.getElementById("filterMarca").value = "";
+        document.getElementById("filterModelo").value = "";
+        document.getElementById("filterPrecio").value = "";
+        document.getElementById("filterAño").value = "";
+        document.getElementById("searchInput").value = "";
+        updateModeloFilter("");
+        applyFiltersDesktop();
+      }
+
+      function applyFilters() {
+        document.getElementById("filterMarca").value =
+          document.getElementById("filterMarcaMobile").value;
+        document.getElementById("filterModelo").value =
+          document.getElementById("filterModeloMobile").value;
+        document.getElementById("filterPrecio").value =
+          document.getElementById("filterPrecioMobile").value;
+        document.getElementById("filterAño").value =
+          document.getElementById("filterAñoMobile").value;
+
+        applyFiltersDesktop();
+        closeFilterModal();
+      }
+
+      document
+        .getElementById("carModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeCarModal();
+        });
+
+      document
+        .getElementById("filterModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeFilterModal();
+        });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeCarModal();
+          closeFilterModal();
+        }
+      });
+
+      loadCars();
+    </script>
+  </body>
+</html>
